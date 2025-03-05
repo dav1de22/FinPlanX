@@ -1,0 +1,6 @@
+@FinPlanXBackend_HostAddress = http://localhost:5251
+
+GET {{FinPlanXBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
