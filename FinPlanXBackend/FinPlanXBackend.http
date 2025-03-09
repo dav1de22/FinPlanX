@@ -1,6 +1,66 @@
 @FinPlanXBackend_HostAddress = http://localhost:5251
+@ContentType = application/json
 
-GET {{FinPlanXBackend_HostAddress}}/weatherforecast/
-Accept: application/json
+### Register a new user
+POST {{FinPlanXBackend_HostAddress}}/api/User/Register
+Content-Type: {{ContentType}}
 
-###
+{
+  "username": "testuser",
+  "passwordHash": "ciao1234",
+  "role": "User"
+}
+
+### Login a user and store the JWT token
+# @name login
+POST {{FinPlanXBackend_HostAddress}}/api/User/Login
+Content-Type: {{ContentType}}
+
+{
+  "username": "David",
+  "passwordHash": "cacca1234"
+}
+
+### Extract the JWT token from the login response
+@jwtToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiRGF2aWQiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImV4cCI6MTc0MTMyNjc0MywiaXNzIjoiRmluUGxhblhCYWNrZW5kIiwiYXVkIjoiRmluUGxhblhGcm9udGVuZCJ9.zOn1Or2K2a8HhDa6W5_0DA8yTFJyMUYS-Wxe08VY5bY
+
+### Get all clients (requires authentication)
+GET {{FinPlanXBackend_HostAddress}}/api/Clients
+Authorization: Bearer {{jwtToken}}
+Accept: {{ContentType}}
+
+### Get a client by ID (requires authentication)
+GET {{FinPlanXBackend_HostAddress}}/api/Clients/3
+Authorization: Bearer {{jwtToken}}
+Accept: {{ContentType}}
+
+### Create a new client (requires authentication)
+POST {{FinPlanXBackend_HostAddress}}/api/Clients
+Authorization: Bearer {{jwtToken}}
+Content-Type: {{ContentType}}
+
+{
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "phone": "123-456-7890",
+  "riskProfile": "Medium",
+  "financialGoal": "Retire by 60"
+}
+
+### Update a client (requires authentication)
+PUT {{FinPlanXBackend_HostAddress}}/api/Clients/2
+Authorization: Bearer {{jwtToken}}
+Content-Type: {{ContentType}}
+
+{
+  "id": 2,
+  "name": "John Doe Updated",
+  "email": "john.doe.updated@example.com",
+  "phone": "123-456-7890",
+  "riskProfile": "High",
+  "financialGoal": "Retire by 55"
+}
+
+### Delete a client (requires authentication)
+DELETE {{FinPlanXBackend_HostAddress}}/api/Clients/2
+Authorization: Bearer {{jwtToken}}
